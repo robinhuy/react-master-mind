@@ -1,25 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Container, AppBar, List, ListItem, ListItemAvatar, ListItemIcon, Divider } from '@material-ui/core';
+import { Lens, PanoramaFishEye, CheckCircleOutline, SwapHorizontalCircleOutlined, HighlightOff } from '@material-ui/icons';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="sm">
+      <AppBar color="primary" position="static">
+        <h1>Master Mind</h1>
+      </AppBar>
+
+      <List component="nav" aria-label="Main mailbox folders">
+        <ListItem>
+          <ListItemAvatar>
+            <div>
+              <div><SwapHorizontalCircleOutlined /><CheckCircleOutline /></div>
+              <div><HighlightOff /><PanoramaFishEye /></div>
+            </div>
+          </ListItemAvatar>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+        </ListItem>
+
+        <Divider />
+
+        <ListItem>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+          <ListItemIcon>
+            <Lens />
+          </ListItemIcon>
+        </ListItem>
+      </List>
+    </Container>
   );
 }
 
