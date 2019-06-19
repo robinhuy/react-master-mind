@@ -1,20 +1,78 @@
 import React from 'react';
-import { Container, AppBar, List, ListItem, ListItemAvatar, ListItemIcon, Divider, Popper, Paper, Typography } from '@material-ui/core';
-import { Lens, PanoramaFishEye, CheckCircleOutline, SwapHorizontalCircleOutlined, HighlightOff } from '@material-ui/icons';
+import { Container, AppBar, Grid, List, ListItem, ListItemAvatar, ListItemIcon, Divider } from '@material-ui/core';
+import { Lens } from '@material-ui/icons';
 import './App.css';
 
-import ChooseColor from './components/ChooseColor'
+import KeyPegs from './components/KeyPegs'
+import ChooseCodePegs from './components/ChooseCodePegs'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051']
+      colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051'],
+      codes: [],
+      rows: [],
+      pegsInRow: 4,
+      numberOfRows: 10,
+      currentRow: 0
     };
   }
 
-  _onChooseColor(i) {
+  _onChooseColor = (i) => {
     console.log(i);
+  }
+
+  _generateRandomCodes = () => {
+    const { colors, pegsInRow } = this.state
+    let codes = [];
+
+    for (let i = 0; i < pegsInRow; i++) {
+      codes.push(colors[Math.floor(Math.random() * colors.length)])
+    }
+
+    return codes;
+  }
+
+  componentDidMount() {
+    this.setState({ codes: this._generateRandomCodes() })
+  }
+
+  _renderCodePeg = () => {
+    const { pegsInRow } = this.state
+    let codePegs = [];
+
+    for (let i = 0; i < pegsInRow; i++) {
+      codePegs.push(
+        <ListItemIcon key={i}>
+          <Lens fontSize="large" style={{ color: 'gray' }} />
+        </ListItemIcon>
+      );
+    }
+
+    return codePegs;
+  }
+
+  _renderDecodingBoard = () => {
+    let rows = [];
+
+    for (let i = 0; i < this.state.numberOfRows; i++) {
+      rows.push(
+        <div key={i}>
+          <ListItem>
+            <ListItemAvatar>
+              <KeyPegs />
+            </ListItemAvatar>
+
+            {this._renderCodePeg()}
+
+            <ChooseCodePegs colors={this.state.colors} onChooseColor={this._onChooseColor} />
+          </ListItem>
+
+          <Divider />
+        </div>
+      );
+    }
   }
 
   render() {
@@ -24,49 +82,8 @@ class App extends React.Component {
           <h1>Master Mind</h1>
         </AppBar>
 
-        <List component="nav">
-          <ListItem>
-            <ListItemAvatar>
-              <div>
-                <div><SwapHorizontalCircleOutlined /><CheckCircleOutline /></div>
-                <div><HighlightOff /><PanoramaFishEye /></div>
-              </div>
-            </ListItemAvatar>
-            <ListItemIcon>
-              <Lens style={{ fontSize: '2.5em' }} />
-            </ListItemIcon>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-
-
-            <ChooseColor color={this.state.colors[1]} onChooseColor={() => this._onChooseColor(1)} />
-          </ListItem>
-
-
-
-          <Divider />
-
-          <ListItem>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-            <ListItemIcon>
-              <Lens />
-            </ListItemIcon>
-          </ListItem>
+        <List>
+          {this._renderDecodingBoard()}
         </List>
       </Container>
     );
