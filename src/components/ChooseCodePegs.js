@@ -12,6 +12,8 @@ export default function ChooseCodePegs(props) {
           </Grid>
         )}
       </Grid>
+
+      <button onClick={props.onSubmit}>Submit</button>
     </Paper>
   );
 }

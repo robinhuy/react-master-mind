@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, AppBar, Grid, List, ListItem, ListItemAvatar, ListItemIcon, Divider } from '@material-ui/core';
+import { Container, AppBar, List, ListItem, ListItemAvatar, ListItemIcon, Divider } from '@material-ui/core';
 import { Lens } from '@material-ui/icons';
 import './App.css';
 
@@ -11,41 +11,70 @@ class App extends React.Component {
     super(props);
     this.state = {
       colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051'],
+      numberOfRows: 10,
+      numberOfPegsInRow: 4,
       codes: [],
       rows: [],
-      pegsInRow: 4,
-      numberOfRows: 10,
-      currentRow: 0
+      currentRow: 0,
+      currentPeg: 0,
     };
   }
 
-  _onChooseColor = (i) => {
-    console.log(i);
-  }
-
   _generateRandomCodes = () => {
-    const { colors, pegsInRow } = this.state
+    const { colors, numberOfPegsInRow } = this.state;
     let codes = [];
 
-    for (let i = 0; i < pegsInRow; i++) {
-      codes.push(colors[Math.floor(Math.random() * colors.length)])
+    for (let i = 0; i < numberOfPegsInRow; i++) {
+      codes.push(colors[Math.floor(Math.random() * colors.length)]);
     }
 
     return codes;
   }
 
   componentDidMount() {
-    this.setState({ codes: this._generateRandomCodes() })
+    const { numberOfPegsInRow, numberOfRows } = this.state;
+
+    this.setState({
+      codes: this._generateRandomCodes(),
+      rows: Array(numberOfRows * numberOfPegsInRow).fill('gray')
+    });
   }
 
-  _renderCodePeg = () => {
-    const { pegsInRow } = this.state
+  _onChooseColor = (color) => {
+    const { rows, currentPeg, numberOfPegsInRow } = this.state;
+    let newRows = Array.from(rows);
+    newRows[currentPeg] = color;
+
+    this.setState({ rows: newRows });
+
+    // Only change the current peg when it is not the final peg in row
+    if ((currentPeg + 1) % numberOfPegsInRow !== 0) {
+      this.setState({ currentPeg: currentPeg + 1 });
+    }
+  }
+
+  _onChangePeg = (index) => {
+    this.setState({ currentPeg: index });
+  }
+
+  _onSubmit = () => {
+    const currentPeg = this.state.currentPeg;
+    this.setState({ currentPeg: currentPeg + 1 });
+  }
+
+  _renderCodePeg = (rowIndex) => {
+    const { numberOfPegsInRow, rows, currentPeg } = this.state;
     let codePegs = [];
 
-    for (let i = 0; i < pegsInRow; i++) {
+    for (let i = 0; i < numberOfPegsInRow; i++) {
+      const index = rowIndex * numberOfPegsInRow + i;
+
       codePegs.push(
-        <ListItemIcon key={i}>
-          <Lens fontSize="large" style={{ color: 'gray' }} />
+        <ListItemIcon
+          key={i}
+          className={currentPeg === index ? "Peg--active" : ""}
+          onClick={() => this._onChangePeg(index)}>
+          <Lens fontSize="large" style={{ color: rows[index] }} />
         </ListItemIcon>
       );
     }
@@ -54,25 +83,28 @@ class App extends React.Component {
   }
 
   _renderDecodingBoard = () => {
-    let rows = [];
+    const { numberOfRows, colors } = this.state
+    let board = [];
 
-    for (let i = 0; i < this.state.numberOfRows; i++) {
-      rows.push(
+    for (let i = 0; i < numberOfRows; i++) {
+      board.push(
         <div key={i}>
           <ListItem>
             <ListItemAvatar>
               <KeyPegs />
             </ListItemAvatar>
 
-            {this._renderCodePeg()}
+            {this._renderCodePeg(i)}
 
-            <ChooseCodePegs colors={this.state.colors} onChooseColor={this._onChooseColor} />
+            <ChooseCodePegs colors={colors} onChooseColor={this._onChooseColor} onSubmit={this._onSubmit} />
           </ListItem>
 
           <Divider />
         </div>
       );
     }
+
+    return board;
   }
 
   render() {

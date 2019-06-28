@@ -2,8 +2,6 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { SwapHorizontalCircleOutlined, CheckCircleOutline, HighlightOff, PanoramaFishEye } from '@material-ui/icons';
 
-const NUMBER_KEY_PEGS = 4;
-
 export default function KeyPegs(props) {
   return (
     <Grid container spacing={2}>
