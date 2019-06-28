@@ -15,6 +15,7 @@ class App extends React.Component {
       numberOfPegsInRow: 4,
       codes: [],
       rows: [],
+      keys: [],
       currentRow: 0,
       currentPeg: 0,
     };
@@ -33,11 +34,18 @@ class App extends React.Component {
 
   componentDidMount() {
     const { numberOfPegsInRow, numberOfRows } = this.state;
+    const length = numberOfRows * numberOfPegsInRow;
 
     this.setState({
       codes: this._generateRandomCodes(),
-      rows: Array(numberOfRows * numberOfPegsInRow).fill('gray')
+      rows: Array(length).fill('gray'),
+      keys: Array(length).fill('gray')
     });
+  }
+
+  _checkCode(rowIndex) {
+    const numberOfBlackPeg = 1;
+    const numberOfWhitePeg = 0;
   }
 
   _onChooseColor = (color) => {
@@ -83,7 +91,7 @@ class App extends React.Component {
   }
 
   _renderDecodingBoard = () => {
-    const { numberOfRows, colors } = this.state
+    const { numberOfRows, numberOfPegsInRow, colors, keys } = this.state
     let board = [];
 
     for (let i = 0; i < numberOfRows; i++) {
@@ -91,7 +99,7 @@ class App extends React.Component {
         <div key={i}>
           <ListItem>
             <ListItemAvatar>
-              <KeyPegs />
+              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i}  />
             </ListItemAvatar>
 
             {this._renderCodePeg(i)}
