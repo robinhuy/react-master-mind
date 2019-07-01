@@ -8,7 +8,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051'],
+      // colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051'],
+      colors: ['red', 'green', 'black', 'brown', 'yellow', 'blue'],
       numberOfRows: 10,
       numberOfPegsInRow: 4,
       codes: [],
@@ -41,11 +42,6 @@ class App extends React.Component {
     });
   }
 
-  _checkCode(rowIndex) {
-    const numberOfBlackPeg = 1;
-    const numberOfWhitePeg = 0;
-  }
-
   _onChooseColor = (color) => {
     const { rows, currentPeg, numberOfPegsInRow } = this.state;
     let newRows = Array.from(rows);
@@ -70,17 +66,53 @@ class App extends React.Component {
   }
 
   _onSubmit = () => {
-    const { currentRow, numberOfPegsInRow } = this.state;
+    const { rows, currentRow, numberOfRows, numberOfPegsInRow } = this.state;
+    const startIndex = currentRow * numberOfPegsInRow;
+    let newCodes = Array.from(this.state.codes);
+    let newKeys = Array.from(this.state.keys);
+    let numberOfBlackPegs = 0;
+    let numberOfWhitePegs = 0;
+    
+    for (let i = 0; i < numberOfPegsInRow; i++) {
+      const index = startIndex + i;
+
+      if (rows[index] === newCodes[i]) {
+        numberOfBlackPegs++;
+        delete(newCodes[i]);
+      }
+    }
+
+    for (let i = 0; i < numberOfPegsInRow; i++) {
+      const index = startIndex + i;
+
+      if (newCodes.indexOf(rows[index]) !== -1) {
+        numberOfWhitePegs++;
+        delete(newCodes[newCodes.indexOf(rows[index])])
+      }
+    }
+
+    if (numberOfBlackPegs === numberOfPegsInRow) {
+      alert('win');
+    } else if (currentRow === numberOfRows - 1) {
+      alert('lose');
+    }
+    
+    for (let i = 0; i < numberOfBlackPegs; i++) {
+      newKeys[startIndex + i] = 'black';
+    }
+
+    for (let i = numberOfBlackPegs; i < numberOfBlackPegs + numberOfWhitePegs; i++) {
+      newKeys[startIndex + i] = 'white';
+    }
 
     this.setState({
+      keys: newKeys,
       currentRow: currentRow + 1,
       currentPeg: (currentRow + 1) * numberOfPegsInRow
     });
   }
 
   render() {
-    const { numberOfRows, numberOfPegsInRow, rows, keys, currentRow, currentPeg, colors } = this.state
-
     return (
       <Container maxWidth="sm">
         <AppBar color="primary" position="static">
@@ -88,13 +120,7 @@ class App extends React.Component {
         </AppBar>
 
         <Board
-          numberOfRows={numberOfRows}
-          numberOfPegsInRow={numberOfPegsInRow}
-          rows={rows}
-          keys={keys}
-          currentRow={currentRow}
-          currentPeg={currentPeg}
-          colors={colors}
+          {...this.state}
           onChangePeg={this._onChangePeg}
           onChooseColor={this._onChooseColor}
           onSubmit={this._onSubmit} />
