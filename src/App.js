@@ -1,11 +1,8 @@
 import React from 'react';
-import { Container, AppBar, List, ListItem, ListItemAvatar, ListItemIcon, Divider } from '@material-ui/core';
-import { Lens } from '@material-ui/icons';
+import { Container, AppBar } from '@material-ui/core';
 import './App.css';
 
-import KeyPegs from './components/KeyPegs'
-import CodePegs from './components/CodePegs'
-import ChooseCodePegs from './components/ChooseCodePegs'
+import Board from './components/Board'
 
 class App extends React.Component {
   constructor(props) {
@@ -63,54 +60,44 @@ class App extends React.Component {
   }
 
   _onChangePeg = (index) => {
-    this.setState({ currentPeg: index });
+    const { currentRow, numberOfPegsInRow } = this.state;
+    const startIndex = currentRow * numberOfPegsInRow;
+    const endIndex = startIndex + numberOfPegsInRow;
+
+    if (index >= startIndex && index < endIndex) {
+      this.setState({ currentPeg: index });
+    }
   }
 
   _onSubmit = () => {
-    const currentPeg = this.state.currentPeg;
-    this.setState({ currentPeg: currentPeg + 1 });
-  }
+    const { currentRow, numberOfPegsInRow } = this.state;
 
-  _renderDecodingBoard = () => {
-    const { numberOfRows, numberOfPegsInRow, currentPeg, rows, keys, colors } = this.state
-    let board = [];
-
-    for (let i = 0; i < numberOfRows; i++) {
-      board.push(
-        <div key={i}>
-          <ListItem>
-            <ListItemAvatar>
-              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
-            </ListItemAvatar>
-
-            <CodePegs
-              rows={rows}
-              numberOfPegsInRow={numberOfPegsInRow}
-              rowIndex={i}
-              currentPeg={currentPeg}
-              onChangePeg={this._onChangePeg} />
-
-            <ChooseCodePegs colors={colors} onChooseColor={this._onChooseColor} onSubmit={this._onSubmit} />
-          </ListItem>
-
-          <Divider />
-        </div>
-      );
-    }
-
-    return board;
+    this.setState({
+      currentRow: currentRow + 1,
+      currentPeg: (currentRow + 1) * numberOfPegsInRow
+    });
   }
 
   render() {
+    const { numberOfRows, numberOfPegsInRow, rows, keys, currentRow, currentPeg, colors } = this.state
+
     return (
       <Container maxWidth="sm">
         <AppBar color="primary" position="static">
           <h1>Master Mind</h1>
         </AppBar>
 
-        <List>
-          {this._renderDecodingBoard()}
-        </List>
+        <Board
+          numberOfRows={numberOfRows}
+          numberOfPegsInRow={numberOfPegsInRow}
+          rows={rows}
+          keys={keys}
+          currentRow={currentRow}
+          currentPeg={currentPeg}
+          colors={colors}
+          onChangePeg={this._onChangePeg}
+          onChooseColor={this._onChooseColor}
+          onSubmit={this._onSubmit} />
       </Container>
     );
   }
