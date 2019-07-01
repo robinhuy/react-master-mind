@@ -4,6 +4,7 @@ import { Lens } from '@material-ui/icons';
 import './App.css';
 
 import KeyPegs from './components/KeyPegs'
+import CodePegs from './components/CodePegs'
 import ChooseCodePegs from './components/ChooseCodePegs'
 
 class App extends React.Component {
@@ -70,28 +71,8 @@ class App extends React.Component {
     this.setState({ currentPeg: currentPeg + 1 });
   }
 
-  _renderCodePeg = (rowIndex) => {
-    const { numberOfPegsInRow, rows, currentPeg } = this.state;
-    let codePegs = [];
-
-    for (let i = 0; i < numberOfPegsInRow; i++) {
-      const index = rowIndex * numberOfPegsInRow + i;
-
-      codePegs.push(
-        <ListItemIcon
-          key={i}
-          className={currentPeg === index ? "Peg--active" : ""}
-          onClick={() => this._onChangePeg(index)}>
-          <Lens fontSize="large" style={{ color: rows[index] }} />
-        </ListItemIcon>
-      );
-    }
-
-    return codePegs;
-  }
-
   _renderDecodingBoard = () => {
-    const { numberOfRows, numberOfPegsInRow, colors, keys } = this.state
+    const { numberOfRows, numberOfPegsInRow, currentPeg, rows, keys, colors } = this.state
     let board = [];
 
     for (let i = 0; i < numberOfRows; i++) {
@@ -99,10 +80,15 @@ class App extends React.Component {
         <div key={i}>
           <ListItem>
             <ListItemAvatar>
-              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i}  />
+              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
             </ListItemAvatar>
 
-            {this._renderCodePeg(i)}
+            <CodePegs
+              rows={rows}
+              numberOfPegsInRow={numberOfPegsInRow}
+              rowIndex={i}
+              currentPeg={currentPeg}
+              onChangePeg={this._onChangePeg} />
 
             <ChooseCodePegs colors={colors} onChooseColor={this._onChooseColor} onSubmit={this._onSubmit} />
           </ListItem>
