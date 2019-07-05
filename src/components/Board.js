@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, ListItemAvatar, Divider } from '@material-ui/core';
+import { List, ListItem, Grid, Divider } from '@material-ui/core';
 
 import KeyPegs from './KeyPegs'
 import CodePegs from './CodePegs'
@@ -12,24 +12,31 @@ export default function Board(props) {
   for (let i = 0; i < numberOfRows; i++) {
     board.push(
       <div key={i}>
-        <ListItem>
-          <ListItemAvatar>
-            <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
-          </ListItemAvatar>
+        <ListItem disableGutters={true}>
+          <Grid container alignContent="center" alignItems="center">
+            <Grid item xs={2}>
+              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
+            </Grid>
 
-          <CodePegs
-            rows={rows}
-            numberOfPegsInRow={numberOfPegsInRow}
-            rowIndex={i}
-            currentPeg={currentPeg}
-            onChangePeg={props.onChangePeg} />
+            <Grid item xs={7}>
+              <CodePegs
+                rows={rows}
+                numberOfPegsInRow={numberOfPegsInRow}
+                rowIndex={i}
+                currentRow={currentRow}
+                currentPeg={currentPeg}
+                onChangePeg={props.onChangePeg} />
+            </Grid>
 
-          {currentRow === i &&
-            <ChooseCodePegs
-              colors={colors}
-              onChooseColor={props.onChooseColor}
-              onSubmit={props.onSubmit} />
-          }
+            <Grid item xs={3}>
+              {currentRow === i &&
+                <ChooseCodePegs
+                  colors={colors}
+                  onChooseColor={props.onChooseColor}
+                  onSubmit={props.onSubmit} />
+              }
+            </Grid>
+          </Grid>
         </ListItem>
 
         <Divider />

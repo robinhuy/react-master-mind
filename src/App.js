@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, AppBar, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
-import './App.css';
+import { Refresh, Mood, MoodBad } from '@material-ui/icons';
 
 import Board from './components/Board'
 
@@ -8,9 +8,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051'],
-      colors: ['red', 'green', 'black', 'brown', 'yellow', 'blue'],
-      numberOfRows: 10,
+      colors: ['#FFB400', '#FF5A5F', '#8CE071', '#00D1C1', '#007A87', '#7B0051'],
+      numberOfRows: 8,
       numberOfPegsInRow: 4,
       codes: [],
       rows: [],
@@ -18,8 +17,7 @@ class App extends React.Component {
       currentRow: 0,
       currentPeg: 0,
       openDialog: false,
-      dialogTitle: 'Game Over',
-      dialogContentText: 'You have lost!'
+      isWin: false
     };
   }
 
@@ -110,14 +108,12 @@ class App extends React.Component {
     if (numberOfBlackPegs === numberOfPegsInRow) {
       this.setState({
         openDialog: true,
-        dialogTitle: 'Congratulation',
-        dialogContentText: 'You are the champion!'
+        isWin: true
       })
     } else if (currentRow === numberOfRows - 1) {
       this.setState({
         openDialog: true,
-        dialogTitle: 'Game Over',
-        dialogContentText: 'Better luck next time!'
+        isWin: false
       })
     }
 
@@ -166,22 +162,31 @@ class App extends React.Component {
 
         <Dialog
           open={this.state.openDialog}
+          maxWidth="xs"
+          fullWidth={true}
           aria-labelledby="dialog-title"
           aria-describedby="dialog-description"
         >
-          <DialogTitle id="dialog-title">{this.state.dialogTitle}</DialogTitle>
+          <DialogTitle id="dialog-title">
+            {this.state.isWin ? 'Congratulation' : 'Game Over'}
+          </DialogTitle>
+
           <DialogContent>
             <DialogContentText id="dialog-description">
-              {this.state.dialogContentText}
+              {this.state.isWin ? (
+                <span>You are the champion!</span>
+              ) : (
+                  <span>Better luck next time!</span>
+                )}
             </DialogContentText>
           </DialogContent>
 
           <DialogActions>
             <Button onClick={this._restartGame} color="primary" autoFocus>
-              Play Again
+              <Refresh fontSize="small" /> Play Again
             </Button>
 
-            <Button onClick={this._handleCloseDialog} color="primary">
+            <Button onClick={this._handleCloseDialog} color="secondary">
               Review Board
             </Button>
           </DialogActions>

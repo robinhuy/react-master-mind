@@ -1,23 +1,29 @@
 import React from 'react';
-import { ListItemIcon } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Lens } from '@material-ui/icons';
 
-export default function CodePegs(props) {
-  const { numberOfPegsInRow, rows, rowIndex, currentPeg } = props;
-  let codePegs = [];
+import './Main.css';
 
+export default function CodePegs(props) {
+  const { numberOfPegsInRow, rows, rowIndex, currentRow, currentPeg } = props;
+  let codePegs = [];
+ 
   for (let i = 0; i < numberOfPegsInRow; i++) {
     const index = rowIndex * numberOfPegsInRow + i;
 
     codePegs.push(
-      <ListItemIcon
+      <Lens
         key={i}
-        className={currentPeg === index ? "Peg--active" : ""}
-        onClick={() => props.onChangePeg(index)}>
-        <Lens fontSize="large" style={{ color: rows[index] }} />
-      </ListItemIcon>
+        fontSize="large"
+        className={currentPeg === index ? "Peg--active" : rowIndex === currentRow ? "Peg" : ""}
+        onClick={() => props.onChangePeg(index)}
+        style={{ color: rows[index] }} />
     );
   }
 
-  return codePegs;
+  return (
+    <Grid container justify="space-evenly">
+      {codePegs}
+    </Grid>
+  );
 }

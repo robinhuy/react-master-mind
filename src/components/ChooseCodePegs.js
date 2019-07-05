@@ -1,19 +1,23 @@
 import React from 'react';
-import { Grid, Paper } from '@material-ui/core';
-import { Lens } from '@material-ui/icons';
+import { Grid, Paper, Button } from '@material-ui/core';
+import { Lens, Check } from '@material-ui/icons';
+
+import './Main.css';
 
 export default function ChooseCodePegs(props) {
   return (
-    <Paper>
-      <Grid container spacing={3}>
+    <Paper className="Choose-Peg">
+      <Grid container alignContent="center" alignItems="center">
         {props.colors.map(color =>
           <Grid item xs={4} key={color}>
-            <Lens style={{ fontSize: '2.5em', color: color }} onClick={() => props.onChooseColor(color)} />
+            <Lens fontSize="large" style={{ cursor: 'pointer', color: color }} onClick={() => props.onChooseColor(color)} />
           </Grid>
         )}
       </Grid>
 
-      <button onClick={props.onSubmit}>Submit</button>
+      <Button variant="outlined" size="small" color="primary" onClick={props.onSubmit}>
+        <Check fontSize="small" /> Submit
+      </Button>
     </Paper>
   );
 }

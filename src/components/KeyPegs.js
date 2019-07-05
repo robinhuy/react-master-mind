@@ -11,19 +11,21 @@ export default function KeyPegs(props) {
 
     gridItem.push(
       <Grid item xs={6} key={i}>
-        {keys[index] === 'black' ? (
-          <CheckCircleOutline />
-        ) : keys[index] === 'white' ? (
-          <SwapHorizontalCircleOutlined />
-        ) : (
-              <PanoramaFishEye />
-            )}
-      </Grid>
+        <Grid container justify="center" alignItems="center">
+          {keys[index] === 'black' ? (
+            <CheckCircleOutline />
+          ) : keys[index] === 'white' ? (
+            <SwapHorizontalCircleOutlined />
+          ) : (
+                <PanoramaFishEye />
+              )}
+        </Grid>
+      </Grid >
     )
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container style={{ maxWidth: '55px', margin: 'auto' }}>
       {gridItem}
     </Grid>
   );
