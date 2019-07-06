@@ -7,7 +7,7 @@ import './Main.css';
 export default function CodePegs(props) {
   const { numberOfPegsInRow, rows, rowIndex, currentRow, currentPeg } = props;
   let codePegs = [];
- 
+
   for (let i = 0; i < numberOfPegsInRow; i++) {
     const index = rowIndex * numberOfPegsInRow + i;
 
@@ -15,7 +15,7 @@ export default function CodePegs(props) {
       <Lens
         key={i}
         fontSize="large"
-        className={currentPeg === index ? "Peg--active" : rowIndex === currentRow ? "Peg" : ""}
+        className={index === currentPeg ? "Code-Peg--active" : rowIndex === currentRow ? "Code-Peg" : ""}
         onClick={() => props.onChangePeg(index)}
         style={{ color: rows[index] }} />
     );

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Container, AppBar, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
-import { Refresh, Mood, MoodBad } from '@material-ui/icons';
+import { Container, AppBar, Typography } from '@material-ui/core';
 
-import Board from './components/Board'
+import Board from './components/Board';
+import ResultDialog from './components/ResultDialog';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class App extends React.Component {
       currentRow: 0,
       currentPeg: 0,
       openDialog: false,
-      isWin: false
+      isWin: null
     };
   }
 
@@ -42,7 +42,8 @@ class App extends React.Component {
       keys: Array(length).fill('gray'),
       currentRow: 0,
       currentPeg: 0,
-      openDialog: false
+      openDialog: false,
+      isWin: null
     });
   }
 
@@ -74,11 +75,11 @@ class App extends React.Component {
   }
 
   _onSubmit = () => {
-    const { currentRow, numberOfRows, numberOfPegsInRow } = this.state;
+    const { codes, rows, keys, currentRow, numberOfRows, numberOfPegsInRow } = this.state;
     const startIndex = currentRow * numberOfPegsInRow;
-    let newCodes = Array.from(this.state.codes);
-    let newRows = Array.from(this.state.rows);
-    let newKeys = Array.from(this.state.keys);
+    let newCodes = Array.from(codes);
+    let newRows = Array.from(rows);
+    let newKeys = Array.from(keys);
     let numberOfBlackPegs = 0;
     let numberOfWhitePegs = 0;
 
@@ -105,6 +106,16 @@ class App extends React.Component {
       }
     }
 
+    // Update key pegs
+    for (let i = 0; i < numberOfBlackPegs; i++) {
+      newKeys[startIndex + i] = 'black';
+    }
+    for (let i = numberOfBlackPegs; i < numberOfBlackPegs + numberOfWhitePegs; i++) {
+      newKeys[startIndex + i] = 'white';
+    }
+    this.setState({ keys: newKeys });
+
+    // Check win
     if (numberOfBlackPegs === numberOfPegsInRow) {
       this.setState({
         openDialog: true,
@@ -115,28 +126,19 @@ class App extends React.Component {
         openDialog: true,
         isWin: false
       })
+    } else {
+      this.setState({
+        currentRow: currentRow + 1,
+        currentPeg: (currentRow + 1) * numberOfPegsInRow
+      });
     }
-
-    for (let i = 0; i < numberOfBlackPegs; i++) {
-      newKeys[startIndex + i] = 'black';
-    }
-
-    for (let i = numberOfBlackPegs; i < numberOfBlackPegs + numberOfWhitePegs; i++) {
-      newKeys[startIndex + i] = 'white';
-    }
-
-    this.setState({
-      keys: newKeys,
-      currentRow: currentRow + 1,
-      currentPeg: (currentRow + 1) * numberOfPegsInRow
-    });
   }
 
-  _handleCloseDialog = () => {
+  _onCloseDialog = () => {
     this.setState({ openDialog: false })
   }
 
-  _restartGame = () => {
+  _onRestartGame = () => {
     this._initGame();
 
     var body = document.body;
@@ -158,39 +160,14 @@ class App extends React.Component {
           {...this.state}
           onChangePeg={this._onChangePeg}
           onChooseColor={this._onChooseColor}
-          onSubmit={this._onSubmit} />
+          onSubmit={this._onSubmit}
+          onRestartGame={this._onRestartGame} />
 
-        <Dialog
-          open={this.state.openDialog}
-          maxWidth="xs"
-          fullWidth={true}
-          aria-labelledby="dialog-title"
-          aria-describedby="dialog-description"
-        >
-          <DialogTitle id="dialog-title">
-            {this.state.isWin ? 'Congratulation' : 'Game Over'}
-          </DialogTitle>
-
-          <DialogContent>
-            <DialogContentText id="dialog-description">
-              {this.state.isWin ? (
-                <span>You are the champion!</span>
-              ) : (
-                  <span>Better luck next time!</span>
-                )}
-            </DialogContentText>
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={this._restartGame} color="primary" autoFocus>
-              <Refresh fontSize="small" /> Play Again
-            </Button>
-
-            <Button onClick={this._handleCloseDialog} color="secondary">
-              Review Board
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <ResultDialog
+          openDialog={this.state.openDialog}
+          isWin={this.state.isWin}
+          onCloseDialog={this._onCloseDialog}
+          onRestartGame={this._onRestartGame} />
       </Container>
     );
   }

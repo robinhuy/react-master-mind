@@ -1,21 +1,44 @@
-.Peg {
+.Board-Row {
+  border-top: 1px solid #ddd;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.Board-Row--active {
+  background-color: #f5f5f5;
+}
+
+.Code-Peg {
   cursor: pointer;
   border: 1px solid #ffffff;
   border-radius: 100%;
 }
 
-.Peg--active {
-  border: 1px solid #aaaaaa;
+.Code-Peg--active, .Code-Peg--win, .Code-Peg--lose {
   border-radius: 100%;
 }
 
-.Choose-Peg {
-  text-align: center;
-  padding: 5px;
-  position: relative;
+.Code-Peg--active {
+  border: 1px solid #aaaaaa;
 }
 
-.Choose-Peg::before {
+.Code-Peg--win {
+  border: 1px solid #85C920;
+}
+
+.Code-Peg--lose {
+  border: 1px solid #FF4B38;
+}
+
+.Color-Pegs {
+  position: relative;
+  padding: 5px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+}
+
+.Color-Pegs::before {
   content: "";
   position: absolute;
   width: 0;
@@ -28,4 +51,20 @@
   transform-origin: 0 0;
   transform: rotate(-45deg);
   box-shadow: -1px -1px 0px -1px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), -1px -1px 0px 0px rgba(0, 0, 0, 0.12)
+}
+
+.Color-Peg {
+  cursor: pointer;
+}
+
+.Color-Peg:hover {
+  opacity: 0.9;
+}
+
+.Color-Peg:active {
+  opacity: 0.6;
+}
+
+.Key {
+  cursor: pointer;
 }
