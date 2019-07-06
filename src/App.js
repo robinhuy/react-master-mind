@@ -1,5 +1,7 @@
 import React from 'react';
-import { Container, AppBar, Typography } from '@material-ui/core';
+import { Container, AppBar, Toolbar, Typography } from '@material-ui/core';
+import introJs from 'intro.js';
+import 'intro.js/minified/introjs.min.css';
 
 import Board from './components/Board';
 import ResultDialog from './components/ResultDialog';
@@ -49,6 +51,9 @@ class App extends React.Component {
 
   componentDidMount() {
     this._initGame();
+
+    // Only show intro if it's the first time visiting page
+    introJs().start();
   }
 
   _onChooseColor = (color) => {
@@ -149,11 +154,18 @@ class App extends React.Component {
 
   render() {
     return (
-      <Container maxWidth="sm">
+      <Container
+        maxWidth="sm"
+        style={{ marginTop: '15px' }}
+        data-intro="Welcome to the MasterMind game! Try to guess the pattern, in both order and color, within eight turns." 
+        data-step="1"
+      >
         <AppBar color="primary" position="static">
-          <Typography variant="h3" component="h1" align="center">
-            MASTERMIND
+          <Toolbar style={{ justifyContent: 'center' }}>
+            <Typography variant="h3" component="h1">
+              MASTERMIND
           </Typography>
+          </Toolbar>
         </AppBar>
 
         <Board

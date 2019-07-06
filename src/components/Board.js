@@ -21,19 +21,37 @@ export default function Board(props) {
         className={isCurrentRow ? 'Board-Row Board-Row--active' : 'Board-Row'}
       >
         <Grid container alignContent="center" alignItems="center">
-          <Grid item xs={2}>
-            <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
-          </Grid>
+          {i == 0 ? (
+            <Grid item xs={2} data-intro="Feedback" data-step="3">
+              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
+            </Grid>
+          ) : (
+              <Grid item xs={2}>
+                <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
+              </Grid>
+            )}
 
-          <Grid item xs={7}>
-            <CodePegs
-              rows={rows}
-              numberOfPegsInRow={numberOfPegsInRow}
-              rowIndex={i}
-              currentRow={currentRow}
-              currentPeg={currentPeg}
-              onChangePeg={props.onChangePeg} />
-          </Grid>
+          {i == 0 ? (
+            <Grid item xs={7} data-intro="Guess the pattern by choose color from the right." data-step="2">
+              <CodePegs
+                rows={rows}
+                numberOfPegsInRow={numberOfPegsInRow}
+                rowIndex={i}
+                currentRow={currentRow}
+                currentPeg={currentPeg}
+                onChangePeg={props.onChangePeg} />
+            </Grid>
+          ) : (
+              <Grid item xs={7}>
+                <CodePegs
+                  rows={rows}
+                  numberOfPegsInRow={numberOfPegsInRow}
+                  rowIndex={i}
+                  currentRow={currentRow}
+                  currentPeg={currentPeg}
+                  onChangePeg={props.onChangePeg} />
+              </Grid>
+            )}
 
           <Grid item xs={3}>
             {isCurrentRow && isWin === null &&
@@ -41,7 +59,8 @@ export default function Board(props) {
                 colors={colors}
                 isWin={isWin}
                 onChooseColor={props.onChooseColor}
-                onSubmit={props.onSubmit} />
+                onSubmit={props.onSubmit}
+                data-intro="Choose the colors here. After submit you'll get feedback of the guess." />
             }
           </Grid>
         </Grid>
@@ -60,11 +79,11 @@ export default function Board(props) {
       <Grid container alignContent="center" alignItems="center">
         <Grid item xs={2}>
           <Grid container justify="center" alignItems="center">
-            <VpnKey style={{color: '#6a6a6a'}} />
+            <VpnKey className="Key" />
           </Grid>
         </Grid>
 
-        <Grid item xs={7}>
+        <Grid item xs={7} data-intro="Here is the result which display at the end game.">
           <HiddenPegs codes={codes} isWin={isWin} />
         </Grid>
 
