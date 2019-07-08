@@ -21,8 +21,13 @@ export default function Board(props) {
         className={isCurrentRow ? 'Board-Row Board-Row--active' : 'Board-Row'}
       >
         <Grid container alignContent="center" alignItems="center">
-          {i == 0 ? (
-            <Grid item xs={2} data-intro="Feedback" data-step="3">
+          {i === 0 ? (
+            <Grid
+              item xs={2}
+              data-intro="Feedback of your guess: Green icon is correct in both color and position, Orange icon is correct color but wrong position."
+              data-step="4"
+              data-disable-interaction="4"
+            >
               <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
             </Grid>
           ) : (
@@ -31,8 +36,13 @@ export default function Board(props) {
               </Grid>
             )}
 
-          {i == 0 ? (
-            <Grid item xs={7} data-intro="Guess the pattern by choose color from the right." data-step="2">
+          {i === 0 ? (
+            <Grid
+              item xs={7}
+              data-intro="Your guess in each turn."
+              data-step="3"
+              data-disable-interaction="3"
+            >
               <CodePegs
                 rows={rows}
                 numberOfPegsInRow={numberOfPegsInRow}
@@ -59,8 +69,7 @@ export default function Board(props) {
                 colors={colors}
                 isWin={isWin}
                 onChooseColor={props.onChooseColor}
-                onSubmit={props.onSubmit}
-                data-intro="Choose the colors here. After submit you'll get feedback of the guess." />
+                onSubmit={props.onSubmit} />
             }
           </Grid>
         </Grid>
@@ -78,12 +87,17 @@ export default function Board(props) {
     >
       <Grid container alignContent="center" alignItems="center">
         <Grid item xs={2}>
-          <Grid container justify="center" alignItems="center">
-            <VpnKey className="Key" />
-          </Grid>
+          <div style={{textAlign: 'center'}}>
+            <VpnKey className="Result-Icon" />
+          </div>
         </Grid>
 
-        <Grid item xs={7} data-intro="Here is the result which display at the end game.">
+        <Grid
+          item xs={7}
+          data-intro="Result of the game, display at the end game."
+          data-step="5"
+          data-disable-interaction="5"
+        >
           <HiddenPegs codes={codes} isWin={isWin} />
         </Grid>
 
@@ -99,7 +113,11 @@ export default function Board(props) {
   )
 
   return (
-    <Paper>
+    <Paper
+      data-intro={`Try to guess the pattern, in both order and color, within ${numberOfRows} turns.`}
+      data-step="1"
+      data-disable-interaction="1"
+    >
       <List>{listItems}</List>
     </Paper>
   );

@@ -9,15 +9,13 @@ export default function ResultDialog(props) {
       open={openDialog}
       maxWidth="xs"
       fullWidth={true}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title">
+      <DialogTitle>
         {isWin ? 'Congratulation' : 'Game Over'}
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="dialog-description">
+        <DialogContentText>
           {isWin ? (
             <span>You are the champion!</span>
           ) : (

@@ -6,7 +6,12 @@ import './Main.css';
 
 export default function ColorPegs(props) {
   return (
-    <div className="Color-Pegs">
+    <div
+      className="Color-Pegs"
+      data-intro="Choose color here and Submit your guess."
+      data-step="2"
+      data-disable-interaction="2"
+    >
       <Grid container alignContent="center" alignItems="center">
         {props.colors.map(color =>
           <Grid item xs={4} key={color}>

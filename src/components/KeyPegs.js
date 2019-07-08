@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import { SwapHorizontalCircleOutlined, CheckCircleOutline, PanoramaFishEye } from '@material-ui/icons';
+import { SwapHorizontalCircle, CheckCircle, PanoramaFishEye } from '@material-ui/icons';
 
 export default function KeyPegs(props) {
   const { keys, numberOfPegsInRow, rowIndex } = props;
@@ -13,9 +13,9 @@ export default function KeyPegs(props) {
       <Grid item xs={6} key={i}>
         <Grid container justify="center" alignItems="center">
           {keys[index] === 'black' ? (
-            <CheckCircleOutline />
+            <CheckCircle style={{color: 'green'}} />
           ) : keys[index] === 'white' ? (
-            <SwapHorizontalCircleOutlined />
+            <SwapHorizontalCircle style={{color: 'orange'}} />
           ) : (
                 <PanoramaFishEye />
               )}

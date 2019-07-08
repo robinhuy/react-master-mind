@@ -4,7 +4,8 @@ import introJs from 'intro.js';
 import 'intro.js/minified/introjs.min.css';
 
 import Board from './components/Board';
-import ResultDialog from './components/ResultDialog';
+import ResultDialog from './components/dialogs/ResultDialog';
+import IntroDialog from './components/dialogs/IntroDialog';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class App extends React.Component {
       keys: [],
       currentRow: 0,
       currentPeg: 0,
-      openDialog: false,
+      openIntroDialog: false,
+      openResultDialog: false,
       isWin: null
     };
   }
@@ -44,7 +46,7 @@ class App extends React.Component {
       keys: Array(length).fill('gray'),
       currentRow: 0,
       currentPeg: 0,
-      openDialog: false,
+      openResultDialog: false,
       isWin: null
     });
   }
@@ -52,8 +54,17 @@ class App extends React.Component {
   componentDidMount() {
     this._initGame();
 
-    // Only show intro if it's the first time visiting page
-    introJs().start();
+    // Only show intro dialog if it's the first time visiting page
+    const isVisited = localStorage.getItem('isVisited');
+    if (isVisited === 'false') {
+      this.setState({ openIntroDialog: true })
+    }
+  }
+
+  _showIntro = () => {
+    this.setState({ openIntroDialog: false })
+    introJs().setOption('showStepNumbers', false).start();
+    localStorage.setItem('isVisited', 'true');
   }
 
   _onChooseColor = (color) => {
@@ -123,12 +134,12 @@ class App extends React.Component {
     // Check win
     if (numberOfBlackPegs === numberOfPegsInRow) {
       this.setState({
-        openDialog: true,
+        openResultDialog: true,
         isWin: true
       })
     } else if (currentRow === numberOfRows - 1) {
       this.setState({
-        openDialog: true,
+        openResultDialog: true,
         isWin: false
       })
     } else {
@@ -139,8 +150,12 @@ class App extends React.Component {
     }
   }
 
-  _onCloseDialog = () => {
-    this.setState({ openDialog: false })
+  _onCloseIntroDialog = () => {
+    this.setState({ openIntroDialog: false })
+  }
+
+  _onCloseResultDialog = () => {
+    this.setState({ openResultDialog: false })
   }
 
   _onRestartGame = () => {
@@ -157,8 +172,6 @@ class App extends React.Component {
       <Container
         maxWidth="sm"
         style={{ marginTop: '15px' }}
-        data-intro="Welcome to the MasterMind game! Try to guess the pattern, in both order and color, within eight turns." 
-        data-step="1"
       >
         <AppBar color="primary" position="static">
           <Toolbar style={{ justifyContent: 'center' }}>
@@ -173,13 +186,19 @@ class App extends React.Component {
           onChangePeg={this._onChangePeg}
           onChooseColor={this._onChooseColor}
           onSubmit={this._onSubmit}
-          onRestartGame={this._onRestartGame} />
+          onRestartGame={this._onRestartGame}
+        />
 
         <ResultDialog
-          openDialog={this.state.openDialog}
+          openDialog={this.state.openResultDialog}
           isWin={this.state.isWin}
-          onCloseDialog={this._onCloseDialog}
+          onCloseDialog={this._onCloseResultDialog}
           onRestartGame={this._onRestartGame} />
+
+        <IntroDialog
+          openDialog={this.state.openIntroDialog}
+          onCloseDialog={this._onCloseIntroDialog}
+          showIntro={this._showIntro} />
       </Container>
     );
   }
