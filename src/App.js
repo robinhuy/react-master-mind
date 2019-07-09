@@ -176,7 +176,7 @@ class App extends React.Component {
         <AppBar color="primary" position="static">
           <Toolbar style={{ justifyContent: 'center' }}>
             <Typography variant="h3" component="h1">
-              MASTERMIND
+              Master Mind
           </Typography>
           </Toolbar>
         </AppBar>

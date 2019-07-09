@@ -66,12 +66,12 @@
 }
 
 .Result-Icon {
-  cursor: pointer;
+  /* cursor: pointer; */
   color: #6a6a6a;
 }
 
-.Result-Icon:hover {
+/* .Result-Icon:hover {
   padding: 5px;
   border-radius: 100%;
   background-color: rgba(255, 152, 0, 0.08);
-}
+} */
