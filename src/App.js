@@ -21,7 +21,9 @@ class App extends React.Component {
       currentPeg: 0,
       openIntroDialog: false,
       openResultDialog: false,
-      isWin: null
+      isWin: null,
+      hasRestartedGame: false,
+      isMobile: false
     };
   }
 
@@ -54,9 +56,13 @@ class App extends React.Component {
   componentDidMount() {
     this._initGame();
 
+    if (window.matchMedia && window.matchMedia('(max-width: 500px)').matches) {
+      this.setState({ isMobile: true })
+    }
+
     // Only show intro dialog if it's the first time visiting page
     const isVisited = localStorage.getItem('isVisited');
-    if (isVisited === 'false') {
+    if (!isVisited) {
       this.setState({ openIntroDialog: true })
     }
   }
@@ -64,7 +70,7 @@ class App extends React.Component {
   _showIntro = () => {
     this.setState({ openIntroDialog: false })
     introJs().setOption('showStepNumbers', false).start();
-    localStorage.setItem('isVisited', 'true');
+    localStorage.setItem('isVisited', '1');
   }
 
   _onChooseColor = (color) => {
@@ -144,10 +150,12 @@ class App extends React.Component {
       })
     } else {
       this.setState({
-        currentRow: currentRow + 1,
         currentPeg: (currentRow + 1) * numberOfPegsInRow
       });
     }
+
+    // Increase step
+    this.setState({ currentRow: currentRow + 1 })
   }
 
   _onCloseIntroDialog = () => {
@@ -159,6 +167,8 @@ class App extends React.Component {
   }
 
   _onRestartGame = () => {
+    this.setState({ hasRestartedGame: true });
+
     this._initGame();
 
     var body = document.body;
@@ -168,6 +178,8 @@ class App extends React.Component {
   }
 
   render() {
+    const { openIntroDialog, openResultDialog, isWin, hasRestartedGame, currentRow } = this.state
+
     return (
       <Container
         maxWidth="sm"
@@ -190,13 +202,15 @@ class App extends React.Component {
         />
 
         <ResultDialog
-          openDialog={this.state.openResultDialog}
-          isWin={this.state.isWin}
+          openDialog={openResultDialog}
+          currentRow={currentRow}
+          isWin={isWin}
+          hasRestartedGame={hasRestartedGame}
           onCloseDialog={this._onCloseResultDialog}
           onRestartGame={this._onRestartGame} />
 
         <IntroDialog
-          openDialog={this.state.openIntroDialog}
+          openDialog={openIntroDialog}
           onCloseDialog={this._onCloseIntroDialog}
           showIntro={this._showIntro} />
       </Container>

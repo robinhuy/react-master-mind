@@ -12,7 +12,7 @@ export default function IntroDialog(props) {
 
       <DialogContent>
         <DialogContentText>
-          If you don't know the rule of the game, please check <a target="_blank" href="https://en.wikipedia.org/wiki/Mastermind_(board_game)">here</a>!
+          If you don't know the rule of the game, please check <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Mastermind_(board_game)">here</a>!
         </DialogContentText>
       </DialogContent>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, List, ListItem, Grid, Button } from '@material-ui/core';
-import { VpnKey, Refresh } from '@material-ui/icons';
+import { Refresh } from '@material-ui/icons';
 
 import KeyPegs from './KeyPegs';
 import CodePegs from './CodePegs';
@@ -8,7 +8,7 @@ import ColorPegs from './ColorPegs';
 import HiddenPegs from './HiddenPegs';
 
 export default function Board(props) {
-  const { numberOfRows, numberOfPegsInRow, codes, rows, keys, currentRow, currentPeg, colors, isWin, onRestartGame } = props
+  const { isMobile, numberOfRows, numberOfPegsInRow, codes, rows, keys, currentRow, currentPeg, colors, isWin, onRestartGame } = props
   let listItems = [];
 
   for (let i = 0; i < numberOfRows; i++) {
@@ -28,17 +28,17 @@ export default function Board(props) {
               data-step="4"
               data-disable-interaction="4"
             >
-              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
+              <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} isMobile={isMobile} />
             </Grid>
           ) : (
               <Grid item xs={2}>
-                <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} />
+                <KeyPegs keys={keys} numberOfPegsInRow={numberOfPegsInRow} rowIndex={i} isMobile={isMobile} />
               </Grid>
             )}
 
           {i === 0 ? (
             <Grid
-              item xs={7}
+              item xs={isMobile ? 6 : 7}
               data-intro="Your guess in each turn."
               data-step="3"
               data-disable-interaction="3"
@@ -49,25 +49,28 @@ export default function Board(props) {
                 rowIndex={i}
                 currentRow={currentRow}
                 currentPeg={currentPeg}
+                isMobile={isMobile}
                 onChangePeg={props.onChangePeg} />
             </Grid>
           ) : (
-              <Grid item xs={7}>
+              <Grid item xs={isMobile ? 6 : 7}>
                 <CodePegs
                   rows={rows}
                   numberOfPegsInRow={numberOfPegsInRow}
                   rowIndex={i}
                   currentRow={currentRow}
                   currentPeg={currentPeg}
+                  isMobile={isMobile}
                   onChangePeg={props.onChangePeg} />
               </Grid>
             )}
 
-          <Grid item xs={3}>
+          <Grid item xs={isMobile ? 4 : 3}>
             {isCurrentRow && isWin === null &&
               <ColorPegs
                 colors={colors}
                 isWin={isWin}
+                isMobile={isMobile}
                 onChooseColor={props.onChooseColor}
                 onSubmit={props.onSubmit} />
             }
@@ -87,9 +90,7 @@ export default function Board(props) {
     >
       <Grid container alignContent="center" alignItems="center">
         <Grid item xs={2}>
-          <div style={{textAlign: 'center'}}>
-            <VpnKey className="Result-Icon" />
-          </div>
+          <div className="Step-Number">{currentRow}</div>
         </Grid>
 
         <Grid

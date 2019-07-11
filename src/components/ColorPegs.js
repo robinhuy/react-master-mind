@@ -5,6 +5,8 @@ import { Lens, Check } from '@material-ui/icons';
 import './Main.css';
 
 export default function ColorPegs(props) {
+  const isMobile = props.isMobile;
+
   return (
     <div
       className="Color-Pegs"
@@ -17,7 +19,7 @@ export default function ColorPegs(props) {
           <Grid item xs={4} key={color}>
             <Lens
               className="Color-Peg"
-              fontSize="large"
+              fontSize={isMobile ? 'default' : 'large'}
               style={{ color: color }}
               onClick={() => props.onChooseColor(color)} />
           </Grid>
@@ -25,7 +27,7 @@ export default function ColorPegs(props) {
       </Grid>
 
       <Button variant="outlined" size="small" color="primary" onClick={props.onSubmit}>
-        <Check fontSize="small" /> Submit
+        <Check fontSize="small" /><span style={isMobile ? { display: 'none' } : {}}> Submit</span>
       </Button>
     </div>
   );

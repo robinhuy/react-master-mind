@@ -5,7 +5,7 @@ import { Lens } from '@material-ui/icons';
 import './Main.css';
 
 export default function CodePegs(props) {
-  const { numberOfPegsInRow, rows, rowIndex, currentRow, currentPeg } = props;
+  const { isMobile, numberOfPegsInRow, rows, rowIndex, currentRow, currentPeg } = props;
   let codePegs = [];
 
   for (let i = 0; i < numberOfPegsInRow; i++) {
@@ -14,7 +14,7 @@ export default function CodePegs(props) {
     codePegs.push(
       <Lens
         key={i}
-        fontSize="large"
+        fontSize={isMobile ? 'default' : 'large'}
         className={index === currentPeg ? "Code-Peg--active" : rowIndex === currentRow ? "Code-Peg" : ""}
         onClick={() => props.onChangePeg(index)}
         style={{ color: rows[index] }} />
